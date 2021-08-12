@@ -27,9 +27,4 @@ public class TextMongoDTO {
 	public String getStr() {
 		return str;
 	}
-
-	@Override
-	public String toString() {
-		return str;
-	}
 }

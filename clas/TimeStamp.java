@@ -6,8 +6,8 @@ import com.srccode.interfaces.Time;
 
 public class TimeStamp implements Time {
 	@Override
-	public Timestamp getTimestamp() {
+	public String getTimestamp() {
 		Timestamp time = new Timestamp(System.currentTimeMillis());
-		return time;
+		return time.toString();
 	}
 }

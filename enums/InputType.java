@@ -1,7 +1,7 @@
 package com.srccode.enums;
 
 public enum InputType {
-	CONSOLE("Console"), FILE("File"), MONGODB("MongoDB"), MYSQL("MySQL");
+	CONSOLE("Console"), FILE("File"), MONGODB("MongoDB"), MYSQL("MySQL"), NEWSTRING("NewString");
 
 	private final String inputType;
 

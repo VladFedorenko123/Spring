@@ -11,7 +11,7 @@ public class ConsonantsCalculator implements Consonants {
 			'l', 'm', 'n', 'p', 'q', 's', 't', 'v', 'x', 'z', 'h', 'r', 'w'));
 
 	@Override
-	public int getConsonants(String text) {
+	public String getConsonants(String text) {
 		text = text.toLowerCase();
 		int consonantsCounter = 0;
 		for (int i = 0; i < text.length(); i++) {
@@ -19,6 +19,6 @@ public class ConsonantsCalculator implements Consonants {
 				consonantsCounter++;
 			}
 		}
-		return consonantsCounter;
+		return Integer.toString(consonantsCounter);
 	}
 }
