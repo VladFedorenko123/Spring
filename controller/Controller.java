@@ -1,9 +1,5 @@
 package com.srccode.controller;
 
-import java.util.ArrayList;
-
-import java.util.List;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.srccode.clas.ConsonantsCalculator;
 import com.srccode.clas.JsonBuilder;
-import com.srccode.clas.MySQLReadText;
 import com.srccode.clas.ReadFile;
 import com.srccode.clas.TimeStamp;
 import com.srccode.clas.VowelsCalculator;
-import com.srccode.dto.TextMongoDTO;
+import com.srccode.dto.LineAfterAnalysesDTO;
 import com.srccode.dto.TextMySQLDTO;
 import com.srccode.enums.InputType;
 import com.srccode.interfaces.Consonants;
 import com.srccode.interfaces.Json;
+import com.srccode.interfaces.MongoPutTextRepository;
 import com.srccode.interfaces.Reader;
 import com.srccode.interfaces.Time;
 import com.srccode.interfaces.Vowels;
@@ -33,7 +29,6 @@ import com.srccode.interfaces.MySQLTextRepository;
 public class Controller {
 	Json json = new JsonBuilder();
 	Reader reader = new ReadFile();
-	Reader mySQL = new MySQLReadText();
 	Vowels vowels = new VowelsCalculator();
 	Consonants consonants = new ConsonantsCalculator();
 	Time timestamp = new TimeStamp();
@@ -44,21 +39,36 @@ public class Controller {
 	@Autowired
 	private MySQLTextRepository mySQLRepository;
 
+	@Autowired
+	private MongoPutTextRepository putRepository;
+
 	@PostMapping("/newstring")
-	public String addString(@RequestParam String newString) {
+	public String addString(@RequestParam String newString, LineAfterAnalysesDTO mongoDTO) {
 		String inputType = InputType.NEWSTRING.getInputType();
+		TextMySQLDTO existed = mySQLRepository.findBySrc(newString);
 		TextMySQLDTO str = new TextMySQLDTO();
-		str.setStr(newString);
-		return json.getJson(inputType, mySQLRepository.save(str).toString());
-	}
+		String text = null;
+		String res = null;
+		if (existed == null) {
+			str.setStr(newString);
+			mySQLRepository.save(str);
+			text = "Saved: " + newString;
 
-	@PostMapping("/putAnalyze")
-	public TextMongoDTO putAnalyze(@RequestParam String number, TextMongoDTO mongoDTO) {
-		List<TextMySQLDTO> list = (ArrayList<TextMySQLDTO>) mySQLRepository.findAll();
-		String text = list.get(Integer.parseInt(number)).toString();
-		mongoDTO.setStr(text);
-		return mongoRepository.save(mongoDTO);
-
+		} else {
+			text = existed.getStr() + " This name is in the database";
+		}
+		if (putRepository.findByStr(newString) == null) {
+			mongoDTO.setStr(newString);
+			mongoDTO.setVowelsNumber(vowels.getVowels(newString));
+			mongoDTO.setConsonantsNumber(consonants.getConsonants(newString));
+			mongoDTO.setTimestamp(timestamp.getTimestamp());
+			putRepository.save(mongoDTO);
+			res = json.getJson(inputType, newString);
+		} else {
+			res = json.getJson(inputType, newString);
+		}
+		String result = text + "\n" + res;
+		return result;
 	}
 
 	@PostMapping("/console")
@@ -83,6 +93,6 @@ public class Controller {
 	@GetMapping("/mongo")
 	public String getMongo(@RequestParam ObjectId id) {
 		String inputType = InputType.MONGODB.getInputType();
-		return json.getJson(inputType, mongoRepository.findById(id).stream().findAny().get().getStr().toString());
+		return json.getJson(inputType, mongoRepository.findById(id).stream().findAny().get().getId().toString());
 	}
 }

@@ -7,32 +7,32 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mytable")
+@Table(name = "srctable")
 public class TextMySQLDTO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Integer _id;
+	public Integer id;
 
-	private String str;
+	private String src;
 
 	public Integer getId() {
-		return _id;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		this._id = id;
+		this.id = id;
 	}
 
-	public void setStr(String str) {
-		this.str = str;
+	public void setStr(String src) {
+		this.src = src;
 	}
 
 	public String getStr() {
-		return str;
+		return src;
 	}
 
 	@Override
 	public String toString() {
-		return str;
+		return src;
 	}
 }

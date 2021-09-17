@@ -8,13 +8,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class LineAfterAnalysesDTO {
 	@Id
 	private ObjectId id;
+	private String str;
 	private String vowelsNumber;
 	private String consonantsNumber;
 	private String timestamp;
 
-	public LineAfterAnalysesDTO(String vowelsNumber, String consonantNumber, String timestamp) {
+	public LineAfterAnalysesDTO(String vowelsNumber, String consonantsNumber, String timestamp) {
 		this.vowelsNumber = vowelsNumber;
-		this.consonantsNumber = consonantNumber;
+		this.consonantsNumber = consonantsNumber;
 		this.timestamp = timestamp;
 	}
 
@@ -26,6 +27,14 @@ public class LineAfterAnalysesDTO {
 		this.id = id;
 	}
 
+	public void setStr(String str) {
+		this.str = str;
+	}
+
+	public String getStr() {
+		return str;
+	}
+
 	public String getVowelsNumber() {
 		return vowelsNumber;
 	}
@@ -34,12 +43,12 @@ public class LineAfterAnalysesDTO {
 		this.vowelsNumber = vowelsNumber;
 	}
 
-	public String getConsonantNumber() {
+	public String getConsonantsNumber() {
 		return consonantsNumber;
 	}
 
-	public void getConsonantNumber(String consonantNumber) {
-		this.consonantsNumber = consonantNumber;
+	public void setConsonantsNumber(String consonantsNumber) {
+		this.consonantsNumber = consonantsNumber;
 	}
 
 	public String getTimestamp() {

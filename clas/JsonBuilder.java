@@ -16,7 +16,7 @@ public class JsonBuilder implements Json {
 		LineAfterAnalysesDTO dto = new LineAfterAnalysesDTO(vowels.getVowels(text), consonants.getConsonants(text),
 				timestamp.getTimestamp());
 		String json = "[\n {\n " + inputType + ": \n" + " Text: \"" + text + "\"\n Vowels: " + dto.getVowelsNumber()
-				+ "\n Consonants: " + dto.getConsonantNumber() + "\n Timestamp: " + dto.getTimestamp() + "\n }\n]\n";
+				+ "\n Consonants: " + dto.getConsonantsNumber() + "\n Timestamp: " + dto.getTimestamp() + "\n }\n]\n";
 		return json;
 	}
 }

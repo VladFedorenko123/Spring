@@ -1,21 +1,21 @@
 package com.srccode.clas;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 
-import com.srccode.interfaces.ConnectMySQL;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class MySQLConnection implements ConnectMySQL {
+import com.srccode.dto.TextMySQLDTO;
+import com.srccode.interfaces.MySQLTextRepository;
+import com.srccode.interfaces.SaveMySQL;
+
+public class MySQLConnection implements SaveMySQL {
+	@Autowired
+	private MySQLTextRepository mySQLRepository;
+
 	@Override
-	public Connection connection() {
-		try {
-			PropertySingleton properties = new PropertySingleton();
-			Class.forName("com.mysql.jdbc.Driver");
-			return DriverManager.getConnection(properties.sqlUrl, properties.sqlUser, properties.sqlPassword);
-		} catch (Throwable e) {
-			e.printStackTrace();
-			return null;
-		}
+	public void saved(String newString) {
+		TextMySQLDTO str = new TextMySQLDTO();
+		str.setStr(newString);
+		mySQLRepository.save(str);
 	}
 
 }
