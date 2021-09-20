@@ -1,6 +1,5 @@
 package com.srccode.clas;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.srccode.dto.TextMySQLDTO;

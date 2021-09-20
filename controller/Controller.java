@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.srccode.clas.ConsonantsCalculator;
+import com.srccode.clas.CounterRequest;
 import com.srccode.clas.JsonBuilder;
 import com.srccode.clas.ReadFile;
 import com.srccode.clas.TimeStamp;
@@ -16,6 +17,7 @@ import com.srccode.dto.LineAfterAnalysesDTO;
 import com.srccode.dto.TextMySQLDTO;
 import com.srccode.enums.InputType;
 import com.srccode.interfaces.Consonants;
+import com.srccode.interfaces.Counter;
 import com.srccode.interfaces.Json;
 import com.srccode.interfaces.MongoPutTextRepository;
 import com.srccode.interfaces.Reader;
@@ -32,7 +34,7 @@ public class Controller {
 	Vowels vowels = new VowelsCalculator();
 	Consonants consonants = new ConsonantsCalculator();
 	Time timestamp = new TimeStamp();
-
+	Counter counter = new CounterRequest();
 	@Autowired
 	private MongoTextRepository mongoRepository;
 
@@ -57,17 +59,24 @@ public class Controller {
 		} else {
 			text = existed.getStr() + " This name is in the database";
 		}
-		if (putRepository.findByStr(newString) == null) {
+		LineAfterAnalysesDTO name = putRepository.findByStr(newString);
+		if (name == null) {
 			mongoDTO.setStr(newString);
 			mongoDTO.setVowelsNumber(vowels.getVowels(newString));
 			mongoDTO.setConsonantsNumber(consonants.getConsonants(newString));
 			mongoDTO.setTimestamp(timestamp.getTimestamp());
+			mongoDTO.setRequestCounter(counter.requestCounter("0"));
 			putRepository.save(mongoDTO);
-			res = json.getJson(inputType, newString);
+			res = json.getJson(inputType, newString, putRepository.findByStr(newString)
+					.getRequestCounter());
 		} else {
-			res = json.getJson(inputType, newString);
+			name.setRequestCounter(counter.requestCounter(putRepository.findByStr(newString)
+					.getRequestCounter()));
+			putRepository.save(name);
+			res = json.getJson(inputType, newString, putRepository.findByStr(newString)
+					.getRequestCounter());
 		}
-		String result = text + "\n" + res;
+		String result = text + "\n\n" + res;
 		return result;
 	}
 
@@ -75,24 +84,24 @@ public class Controller {
 	public String getConsole() {
 		String text = "vlad";
 		String inputType = InputType.CONSOLE.getInputType();
-		return json.getJson(inputType, text);
+		return json.getJson(inputType, text, "0");
 	}
 
 	@GetMapping("/file")
 	public String getFile() {
 		String inputType = InputType.FILE.getInputType();
-		return json.getJson(inputType, reader.getText());
+		return json.getJson(inputType, reader.getText(), "0");
 	}
 
 	@GetMapping("/mysql")
 	public String getMySQl() {
 		String inputType = InputType.MYSQL.getInputType();
-		return json.getJson(inputType, mySQLRepository.findAll().toString());
+		return json.getJson(inputType, mySQLRepository.findAll().toString(), "0");
 	}
 
 	@GetMapping("/mongo")
 	public String getMongo(@RequestParam ObjectId id) {
 		String inputType = InputType.MONGODB.getInputType();
-		return json.getJson(inputType, mongoRepository.findById(id).stream().findAny().get().getId().toString());
+		return json.getJson(inputType, mongoRepository.findById(id).stream().findAny().get().getId().toString(), "0");
 	}
 }

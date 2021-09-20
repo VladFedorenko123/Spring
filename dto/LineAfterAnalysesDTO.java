@@ -12,6 +12,7 @@ public class LineAfterAnalysesDTO {
 	private String vowelsNumber;
 	private String consonantsNumber;
 	private String timestamp;
+	private String requestCounter;
 
 	public LineAfterAnalysesDTO(String vowelsNumber, String consonantsNumber, String timestamp) {
 		this.vowelsNumber = vowelsNumber;
@@ -57,5 +58,13 @@ public class LineAfterAnalysesDTO {
 
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getRequestCounter() {
+		return requestCounter;
+	}
+
+	public void setRequestCounter(String requestCounter) {
+		this.requestCounter = requestCounter;
 	}
 }
