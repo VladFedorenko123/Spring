@@ -2,9 +2,10 @@ package com.srccode.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import com.srccode.clas.VowelsCalculator;
+
 
 class VowelsCalculatorTest {
 	VowelsCalculator objectUnderTest = new VowelsCalculator();

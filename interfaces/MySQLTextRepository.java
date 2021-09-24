@@ -7,5 +7,5 @@ import com.srccode.dto.TextMySQLDTO;
 
 @Repository
 public interface MySQLTextRepository extends CrudRepository<TextMySQLDTO, Integer> {
-	TextMySQLDTO findBySrc(String src);
+    TextMySQLDTO findBySrc(String src);
 }

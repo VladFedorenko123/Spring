@@ -1,5 +1,5 @@
 package com.srccode.interfaces;
 
 public interface SaveMySQL {
-	void saved(String newString);
+    void saved(String newString);
 }

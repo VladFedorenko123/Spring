@@ -1,5 +1,5 @@
 package com.srccode.interfaces;
 
 public interface Reader {
-	String getText();
+    String getText();
 }

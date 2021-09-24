@@ -7,24 +7,24 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Col")
 public class TextMongoDTO {
-	@Id
-	public ObjectId _id;
+    @Id
+    public ObjectId _id;
 
-	private String str;
+    private String str;
 
-	public ObjectId getId() {
-		return _id;
-	}
+    public ObjectId getId() {
+        return _id;
+    }
 
-	public void setId(ObjectId id) {
-		this._id = id;
-	}
+    public void setId(ObjectId id) {
+        this._id = id;
+    }
 
-	public void setStr(String str) {
-		this.str = str;
-	}
+    public void setStr(String str) {
+        this.str = str;
+    }
 
-	public String getStr() {
-		return str;
-	}
+    public String getStr() {
+        return str;
+    }
 }
