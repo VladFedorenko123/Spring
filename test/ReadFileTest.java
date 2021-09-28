@@ -1,10 +1,10 @@
 package com.srccode.test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
 
 import java.io.File;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ReadFileTest {
 

@@ -1,6 +1,8 @@
 package com.srccode.controller;
 
 import ch.qos.logback.classic.Logger;
+import com.srccode.clas.*;
+import com.srccode.interfaces.*;
 import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,27 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.srccode.clas.ConsonantsCalculator;
-import com.srccode.clas.CounterRequest;
-import com.srccode.clas.JsonBuilder;
-import com.srccode.clas.ReadFile;
-import com.srccode.clas.TimeStamp;
-import com.srccode.clas.VowelsCalculator;
 import com.srccode.dto.LineAfterAnalysesDTO;
 import com.srccode.dto.TextMySQLDTO;
 import com.srccode.enums.InputType;
-import com.srccode.interfaces.Consonants;
-import com.srccode.interfaces.Counter;
-import com.srccode.interfaces.Json;
-import com.srccode.interfaces.MongoPutTextRepository;
-import com.srccode.interfaces.Reader;
-import com.srccode.interfaces.Time;
-import com.srccode.interfaces.Vowels;
 
 import lombok.RequiredArgsConstructor;
-
-import com.srccode.interfaces.MongoTextRepository;
-import com.srccode.interfaces.MySQLTextRepository;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +26,7 @@ public class Controller {
     Consonants consonants = new ConsonantsCalculator();
     Time timestamp = new TimeStamp();
     Counter counter = new CounterRequest();
-
+    Memcached memcached = new MemcachedImplementation();
     private static final Logger logger = (Logger) LoggerFactory.getLogger(Controller.class);
 
     @Autowired
@@ -56,10 +42,9 @@ public class Controller {
     @PostMapping("/newstring")
     public String addString(@RequestParam String newString,
                             LineAfterAnalysesDTO mongoDTO) {
-        Integer error = 400;
         String text = null;
         String res = null;
-        String result = text + "\n\n" + res;
+        String result = null;
         if (newString.isEmpty()) {
             result = "Error: text can't be empty";
             logger.error("Error: text can't be empty");
@@ -71,10 +56,13 @@ public class Controller {
                 str.setSrc(newString);
                 mySQLRepository.save(str);
                 text = "Saved: " + newString;
-
+                memcached.mCache(str.getId().toString(),str.getSrc());
             } else {
                 text = existed.getSrc() + " This name is in the database";
+               memcached.mCache(existed.getId().toString(),existed.getSrc());
             }
+
+            //MongoDB
             LineAfterAnalysesDTO name = putRepository.findByStr(newString);
             if (name == null) {
                 mongoDTO.setStr(newString);
@@ -93,6 +81,7 @@ public class Controller {
                         .getRequestCounter());
             }
         }
+        result = text + "\n\n" + res;
         return result;
     }
 

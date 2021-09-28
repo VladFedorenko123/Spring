@@ -1,14 +1,17 @@
 package com.srccode.dto;
 
+import com.srccode.clas.MemcachedImplementation;
+import com.srccode.interfaces.Memcached;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.spy.memcached.MemcachedClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 
 @Data
 @NoArgsConstructor
