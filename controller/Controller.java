@@ -6,6 +6,7 @@ import com.srccode.interfaces.*;
 import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,7 @@ public class Controller {
     Time timestamp = new TimeStamp();
     Counter counter = new CounterRequest();
     Memcached memcached = new MemcachedImplementation();
+    Memcached springMemcache = new SpringMemcache();
     private static final Logger logger = (Logger) LoggerFactory.getLogger(Controller.class);
 
     @Autowired
@@ -40,6 +42,7 @@ public class Controller {
 
 
     @PostMapping("/newstring")
+    @Cacheable(value="newstring")
     public String addString(@RequestParam String newString,
                             LineAfterAnalysesDTO mongoDTO) {
         String text = null;
@@ -56,10 +59,12 @@ public class Controller {
                 str.setSrc(newString);
                 mySQLRepository.save(str);
                 text = "Saved: " + newString;
-                memcached.mCache(str.getId().toString(),str.getSrc());
+                logger.info("cahing value " + springMemcache.mCache(str.getSrc()));
+                memcached.mCache(str.getSrc());
             } else {
                 text = existed.getSrc() + " This name is in the database";
-               memcached.mCache(existed.getId().toString(),existed.getSrc());
+                logger.info("cahing value " + springMemcache.mCache(existed.getSrc()));
+                memcached.mCache(existed.getSrc());
             }
 
             //MongoDB

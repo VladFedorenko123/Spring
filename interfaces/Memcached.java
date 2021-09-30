@@ -1,7 +1,7 @@
 package com.srccode.interfaces;
 
-import net.spy.memcached.MemcachedClient;
+import com.srccode.dto.TextMySQLDTO;
 
 public interface Memcached {
-    void mCache(String key, String value);
+    String mCache(String value);
 }
