@@ -1,11 +1,9 @@
 package com.srccode.test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.srccode.clas.ConsonantsCalculator;
 import org.junit.Test;
 
-import com.srccode.clas.ConsonantsCalculator;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConsonantsCalculatorTest {
     ConsonantsCalculator objectUnderTest = new ConsonantsCalculator();

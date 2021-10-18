@@ -1,10 +1,7 @@
 package com.srccode.clas;
 
-import com.srccode.dto.TextMySQLDTO;
 import com.srccode.interfaces.Memcached;
 import com.srccode.interfaces.MySQLTextRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;

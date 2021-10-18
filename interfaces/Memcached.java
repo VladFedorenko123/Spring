@@ -1,7 +1,7 @@
 package com.srccode.interfaces;
 
-import com.srccode.dto.TextMySQLDTO;
+import java.io.IOException;
 
 public interface Memcached {
-    String mCache(String value);
+    String mCache(String value) throws IOException;
 }

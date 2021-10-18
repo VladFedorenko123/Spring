@@ -1,11 +1,7 @@
 package com.srccode.clas;
 
 import com.srccode.dto.LineAfterAnalysesDTO;
-import com.srccode.interfaces.Consonants;
-import com.srccode.interfaces.Counter;
-import com.srccode.interfaces.Json;
-import com.srccode.interfaces.Time;
-import com.srccode.interfaces.Vowels;
+import com.srccode.interfaces.*;
 
 public class JsonBuilder implements Json {
     Vowels vowels = new VowelsCalculator();

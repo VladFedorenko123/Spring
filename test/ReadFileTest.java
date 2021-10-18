@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ReadFileTest {
 

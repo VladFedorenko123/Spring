@@ -1,8 +1,8 @@
 package com.srccode.clas;
 
-import java.sql.Timestamp;
-
 import com.srccode.interfaces.Time;
+
+import java.sql.Timestamp;
 
 public class TimeStamp implements Time {
     @Override

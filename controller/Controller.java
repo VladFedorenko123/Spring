@@ -2,7 +2,11 @@ package com.srccode.controller;
 
 import ch.qos.logback.classic.Logger;
 import com.srccode.clas.*;
+import com.srccode.dto.LineAfterAnalysesDTO;
+import com.srccode.dto.TextMySQLDTO;
+import com.srccode.enums.InputType;
 import com.srccode.interfaces.*;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.srccode.dto.LineAfterAnalysesDTO;
-import com.srccode.dto.TextMySQLDTO;
-import com.srccode.enums.InputType;
-
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 public class Controller {
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(Controller.class);
     Json json = new JsonBuilder();
     Reader reader = new ReadFile();
     Vowels vowels = new VowelsCalculator();
@@ -29,8 +30,8 @@ public class Controller {
     Counter counter = new CounterRequest();
     Memcached memcached = new MemcachedImplementation();
     Memcached springMemcache = new SpringMemcache();
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(Controller.class);
-
+  /*  @Autowired
+    Memcached memcached;*/
     @Autowired
     private MongoTextRepository mongoRepository;
 
@@ -42,9 +43,9 @@ public class Controller {
 
 
     @PostMapping("/newstring")
-    @Cacheable(value="newstring")
+    @Cacheable(value = "newstring")
     public String addString(@RequestParam String newString,
-                            LineAfterAnalysesDTO mongoDTO) {
+                            LineAfterAnalysesDTO mongoDTO) throws IOException {
         String text = null;
         String res = null;
         String result = null;

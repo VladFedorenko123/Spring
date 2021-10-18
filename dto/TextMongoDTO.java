@@ -2,7 +2,6 @@ package com.srccode.dto;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Col")
@@ -20,11 +19,11 @@ public class TextMongoDTO {
         this._id = id;
     }
 
-    public void setStr(String str) {
-        this.str = str;
-    }
-
     public String getStr() {
         return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
     }
 }

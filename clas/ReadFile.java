@@ -1,11 +1,11 @@
 package com.srccode.clas;
 
+import com.srccode.interfaces.Reader;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import com.srccode.interfaces.Reader;
 
 public class ReadFile implements Reader {
     @Override

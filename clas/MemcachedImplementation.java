@@ -1,6 +1,5 @@
 package com.srccode.clas;
 
-import com.srccode.dto.TextMySQLDTO;
 import com.srccode.interfaces.Memcached;
 import net.spy.memcached.MemcachedClient;
 import org.slf4j.Logger;
@@ -17,8 +16,7 @@ public class MemcachedImplementation implements Memcached {
     @Override
     public String mCache(String value) {
         try {
-            ApplicationPropertiesSingleton  applicationProperties = new ApplicationPropertiesSingleton();
-            MemcachedClient memcachedClient = new MemcachedClient(new InetSocketAddress(applicationProperties.ip, Integer.parseInt(applicationProperties.port)));
+            MemcachedClient memcachedClient = new MemcachedClient(new InetSocketAddress("localhost", 11211));
             logger.info("Connection to server successfully");
             logger.info("set status " + memcachedClient.set("key", 60, value).isDone());
             logger.info("add status " + memcachedClient.add("key", 60, value).isDone());
