@@ -1,10 +1,10 @@
-package com.srccode.clas;
+package com.srccode.dao;
 
-import com.srccode.interfaces.Counter;
+import com.srccode.ui.Counter;
 
 public class CounterRequest implements Counter {
     @Override
-    public String requestCounter(String k) {
+    public String getRequestCounter(String k) {
         int counter = 0;
 
         if (k == null) {
@@ -15,5 +15,4 @@ public class CounterRequest implements Counter {
         }
         return Integer.toString(counter);
     }
-
 }

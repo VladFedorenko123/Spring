@@ -1,118 +1,66 @@
 package com.srccode.controller;
 
 import ch.qos.logback.classic.Logger;
-import com.srccode.clas.*;
-import com.srccode.dto.LineAfterAnalysesDTO;
-import com.srccode.dto.TextMySQLDTO;
-import com.srccode.enums.InputType;
-import com.srccode.interfaces.*;
-import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
+import com.srccode.dao.JsonBuilder;
+import com.srccode.repository.LineAfterAnalysesRepository;
+import com.srccode.repository.UserRepository;
+import com.srccode.service.LineAfterAnalysesService;
+import com.srccode.service.UserService;
+import com.srccode.ui.Json;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @RestController
-@RequiredArgsConstructor
 public class Controller {
     private static final Logger logger = (Logger) LoggerFactory.getLogger(Controller.class);
+
     Json json = new JsonBuilder();
-    Reader reader = new ReadFile();
-    Vowels vowels = new VowelsCalculator();
-    Consonants consonants = new ConsonantsCalculator();
-    Time timestamp = new TimeStamp();
-    Counter counter = new CounterRequest();
-    Memcached memcached = new MemcachedImplementation();
-    Memcached springMemcache = new SpringMemcache();
-  /*  @Autowired
-    Memcached memcached;*/
     @Autowired
-    private MongoTextRepository mongoRepository;
-
+    private UserService userService;
     @Autowired
-    private MySQLTextRepository mySQLRepository;
-
+    private UserRepository userRepository;
     @Autowired
-    private MongoPutTextRepository putRepository;
+    private LineAfterAnalysesService lineAfterAnalysesService;
+    @Autowired
+    private LineAfterAnalysesRepository lineAfterAnalysesRepository;
 
-
-    @PostMapping("/newstring")
-    @Cacheable(value = "newstring")
-    public String addString(@RequestParam String newString,
-                            LineAfterAnalysesDTO mongoDTO) throws IOException {
-        String text = null;
-        String res = null;
-        String result = null;
-        if (newString.isEmpty()) {
-            result = "Error: text can't be empty";
+    @PostMapping("/name")
+    public String addUser(@RequestParam String name) {
+        String text;
+        String textMongo ;
+        String result;
+        if (name.isEmpty()) {
+            text = "Error: text can't be empty";
             logger.error("Error: text can't be empty");
         } else {
-            String inputType = InputType.NEWSTRING.getInputType();
-            TextMySQLDTO existed = mySQLRepository.findBySrc(newString);
-            TextMySQLDTO str = new TextMySQLDTO();
-            if (existed == null) {
-                str.setSrc(newString);
-                mySQLRepository.save(str);
-                text = "Saved: " + newString;
-                logger.info("cahing value " + springMemcache.mCache(str.getSrc()));
-                memcached.mCache(str.getSrc());
+            if (userRepository.findBySrc(name) == null) {
+                userService.saveUser(name);
+                text = "This name saved to database: " + name;
             } else {
-                text = existed.getSrc() + " This name is in the database";
-                logger.info("cahing value " + springMemcache.mCache(existed.getSrc()));
-                memcached.mCache(existed.getSrc());
-            }
-
-            //MongoDB
-            LineAfterAnalysesDTO name = putRepository.findByStr(newString);
-            if (name == null) {
-                mongoDTO.setStr(newString);
-                mongoDTO.setVowelsNumber(vowels.getVowels(newString));
-                mongoDTO.setConsonantsNumber(consonants.getConsonants(newString));
-                mongoDTO.setTimestamp(timestamp.getTimestamp());
-                mongoDTO.setRequestCounter(counter.requestCounter("0"));
-                putRepository.save(mongoDTO);
-                res = json.getJson(inputType, newString, putRepository.findByStr(newString)
-                        .getRequestCounter());
-            } else {
-                name.setRequestCounter(counter.requestCounter(putRepository.findByStr(newString)
-                        .getRequestCounter()));
-                putRepository.save(name);
-                res = json.getJson(inputType, newString, putRepository.findByStr(newString)
-                        .getRequestCounter());
+                text = "This name is in database";
+                logger.error("This name is in database");
             }
         }
-        result = text + "\n\n" + res;
+        if (lineAfterAnalysesRepository.findByStr(name) == null) {
+            lineAfterAnalysesService.saveAnalyses(name);
+            textMongo = json.getJson(lineAfterAnalysesService.findName(name),
+                    lineAfterAnalysesService.findVowels(name),
+                    lineAfterAnalysesService.findConsonants(name),
+                    lineAfterAnalysesService.findTimestamp(name),
+                    lineAfterAnalysesService.findRequestCounter(name));
+        } else {
+            lineAfterAnalysesService.findAnalyses(name);
+            textMongo = json.getJson(lineAfterAnalysesService.findName(name),
+                    lineAfterAnalysesService.findVowels(name),
+                    lineAfterAnalysesService.findConsonants(name),
+                    lineAfterAnalysesService.findTimestamp(name),
+                    lineAfterAnalysesService.findRequestCounter(name));
+
+        }
+        result = text + "\n\n" + textMongo;
         return result;
-    }
-
-    @PostMapping("/console")
-    public String getConsole() {
-        String text = "vlad";
-        String inputType = InputType.CONSOLE.getInputType();
-        return json.getJson(inputType, text, "0");
-    }
-
-    @GetMapping("/file")
-    public String getFile() {
-        String inputType = InputType.FILE.getInputType();
-        return json.getJson(inputType, reader.getText(), "0");
-    }
-
-    @GetMapping("/mysql")
-    public String getMySQl() {
-        String inputType = InputType.MYSQL.getInputType();
-        return json.getJson(inputType, mySQLRepository.findAll().toString(), "0");
-    }
-
-    @GetMapping("/mongo")
-    public String getMongo(@RequestParam ObjectId id) {
-        String inputType = InputType.MONGODB.getInputType();
-        return json.getJson(inputType, mongoRepository.findById(id).stream().findAny().get().getId().toString(), "0");
     }
 }

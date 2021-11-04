@@ -1,4 +1,4 @@
-package com.srccode.interfaces;
+package com.srccode.ui;
 
 public interface Time {
     String getTimestamp();

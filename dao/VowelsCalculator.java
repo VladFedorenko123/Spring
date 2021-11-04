@@ -1,10 +1,10 @@
-package com.srccode.clas;
+package com.srccode.dao;
+
+import com.srccode.ui.Vowels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.srccode.interfaces.Vowels;
 
 public class VowelsCalculator implements Vowels {
     private static final List<Character> VOWELS = new ArrayList<>(Arrays.asList('a', 'e', 'i', 'o', 'u', 'y'));

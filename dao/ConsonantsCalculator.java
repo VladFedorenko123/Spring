@@ -1,10 +1,10 @@
-package com.srccode.clas;
+package com.srccode.dao;
+
+import com.srccode.ui.Consonants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.srccode.interfaces.Consonants;
 
 public class ConsonantsCalculator implements Consonants {
     private static final List<Character> CONSONANTS = new ArrayList<>(Arrays.asList('b', 'c', 'd', 'f', 'q', 'j', 'k',
