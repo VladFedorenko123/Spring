@@ -1,4 +1,4 @@
-package com.srccode.repository;
+package com.srccode.dao;
 
 import com.srccode.model.LineAfterAnalyses;
 import org.bson.types.ObjectId;

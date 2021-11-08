@@ -1,6 +1,6 @@
-package com.srccode.dao;
+package com.srccode.implementation;
 
-import com.srccode.ui.Vowels;
+import com.srccode.interfaces.Vowels;
 
 import java.util.ArrayList;
 import java.util.Arrays;

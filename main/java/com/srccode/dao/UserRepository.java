@@ -1,4 +1,4 @@
-package com.srccode.repository;
+package com.srccode.dao;
 
 import com.srccode.model.User;
 import org.springframework.data.repository.CrudRepository;

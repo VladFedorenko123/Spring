@@ -1,6 +1,6 @@
-package com.srccode.dao;
+package com.srccode.implementation;
 
-import com.srccode.ui.Time;
+import com.srccode.interfaces.Time;
 
 import java.sql.Timestamp;
 
